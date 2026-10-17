@@ -1,4 +1,5 @@
 
+from fastapi.responses import JSONResponse
 import jwt
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -42,4 +43,7 @@ def verify_token(body: VerifyRequest):
             "aud": claims["aud"],
         }
     except (InvalidTokenError, KeyError, TypeError, ValueError):
-        raise HTTPException(status_code=401, detail={"valid": False})
+        return JSONResponse(
+            status_code=401,
+            content={"valid": False},
+        )
